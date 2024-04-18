@@ -17,6 +17,7 @@ model User {
   created_at    DateTime? @default(now())
 
   mappedArea MappedArea[]
+  plantation Plantation[]
 
   @@map("users")
 }
@@ -26,6 +27,8 @@ model Cultivation {
   name                  String
   description           String?
   probable_harvest_date DateTime
+
+  plantation Plantation[]
 
   @@map("cultivations")
 }
@@ -40,5 +43,26 @@ model MappedArea {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
+  plantation Plantation[]
+
   @@map("mappeds-area")
+}
+
+model Plantation {
+  id               String    @id @default(uuid())
+  name             String
+  planting_date    DateTime
+  previous_culture String?
+  created_at       DateTime? @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  cultivation   Cultivation @relation(fields: [cultivationId], references: [id])
+  cultivationId String
+
+  mappedArea   MappedArea @relation(fields: [mappedAreaId], references: [id])
+  mappedAreaId String
+
+  @@map("plantations")
 }
