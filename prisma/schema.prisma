@@ -16,6 +16,8 @@ model User {
   phone         String?
   created_at    DateTime? @default(now())
 
+  mappedArea MappedArea[]
+
   @@map("users")
 }
 
@@ -26,4 +28,17 @@ model Cultivation {
   probable_harvest_date DateTime
 
   @@map("cultivations")
+}
+
+model MappedArea {
+  id              String  @id @default(uuid())
+  name            String
+  geospatial_data String
+  total_area      String
+  center_pont     String?
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@map("mappeds-area")
 }
