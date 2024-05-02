@@ -2,8 +2,15 @@ import fastify from 'fastify'
 import { appRoutes } from './http/routes'
 import { ZodError } from 'zod'
 import { env } from './env'
+import cors from '@fastify/cors'
 
 export const app = fastify()
+
+app.register(cors, {
+  origin: true,
+  // origin: ['http://localhost:5173'], // Substitua pelo seu endereço de front-end
+  credentials: true // Permitir credenciais
+})
 
 app.register(appRoutes)
 
