@@ -5,11 +5,11 @@ import { z } from 'zod'
 
 export async function CreateUser (req: FastifyRequest, res: FastifyReply) {
   const createUserBodySchema = z.object({
-    name: z.string(),
-    email: z.string(),
-    password: z.string().min(6),
+    name: z.string().min(3, 'O nome deve ter mais de 3 caracteres'),
+    email: z.string().min(3, 'O email deve ter mais de 3 caracteres'),
+    password: z.string().min(6, 'A senha deve ter mais de 6 caracteres'),
     phone: z.string().min(6).optional(),
-    role: z.string()
+    role: z.string().min(1)
   })
 
   const {
