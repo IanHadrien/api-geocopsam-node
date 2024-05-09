@@ -4,9 +4,12 @@ import { z } from 'zod'
 
 export async function CreateCultivation (req: FastifyRequest, res: FastifyReply) {
   const createCultivationBodySchema = z.object({
-    name: z.string(),
+    name: z.string().min(3, 'O nome deve ter mais de 3 caracteres'),
     description: z.string().optional(),
-    probableHarvestDate: z.string()
+    probableHarvestDate: z.coerce.date({
+      required_error: 'A data é obrigatoria',
+      invalid_type_error: 'Data inválida'
+    })
   })
 
   console.log(createCultivationBodySchema)
