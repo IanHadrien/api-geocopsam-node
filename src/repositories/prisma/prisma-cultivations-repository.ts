@@ -3,6 +3,12 @@ import { prisma } from '@/lib/prisma'
 import { CultivationsRepository } from '../interfaces/cultivations-repository'
 
 export class PrismaCultivationsRepository implements CultivationsRepository {
+  async getAll () {
+    const cultivation = await prisma.cultivation.findMany()
+
+    return cultivation
+  }
+
   async create (data: Prisma.CultivationCreateInput) {
     const cultivation = await prisma.cultivation.create({
       data
