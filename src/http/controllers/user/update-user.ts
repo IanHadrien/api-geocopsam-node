@@ -31,11 +31,12 @@ export async function UpdateUser (req: FastifyRequest, res: FastifyReply) {
       userId, name, email, password, phone, role
     })
   } catch (err) {
+    console.error('Error: ', err)
     if (err instanceof NotFoundError) {
       return res.status(409).send({ message: err.message })
     }
 
-    return res.status(500).send()
+    return res.status(500).send({ message: err })
   }
 
   return res.status(200).send()

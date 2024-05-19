@@ -3,20 +3,22 @@ import { DeleteUserUseCase } from '@/use-cases/users/delete-user'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 export async function DeleteUser (req: FastifyRequest, res: FastifyReply) {
-  const userId = req.params.id // Aqui você acessa o ID passado na rot
+  const userId = req.params.id as string
+
+  console.log('delete', userId)
 
   const prismaUsersRepository = new PrismaUsersRepository()
 
   try {
     const deleteUseCase = new DeleteUserUseCase(prismaUsersRepository)
-    const user = deleteUseCase.execute({ userId })
+    await deleteUseCase.execute({ userId })
 
-    return user
+    return res.status(200).send({ message: 'User deleted successfully' })
   } catch (err) {
     // if (err instanceof UserAlreadyExistsError) {
     //   return res.status(409).send({ message: err.message })
     // }
-    console.error(err)
+    console.error('Error: ', err)
 
     return res.status(500).send()
   }

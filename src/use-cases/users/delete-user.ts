@@ -1,5 +1,6 @@
 import { UsersRepository } from '@/repositories/interfaces/users-repository'
 import { User } from '@prisma/client'
+import { NotFoundError } from '../errors/not-found-error'
 
 interface DeleteUserUseCaseResquest {
   userId: string
@@ -15,9 +16,16 @@ export class DeleteUserUseCase {
   async execute ({
     userId
   }: DeleteUserUseCaseResquest): Promise<DeleteUserUseCaseResponse> {
-    console.log('Id teste', userId)
-    const user = await this.userRepository.delete(userId)
+    const user = await this.userRepository.findById(userId)
 
-    return { user }
+    if (!user) {
+      throw new NotFoundError()
+    }
+
+    console.log('Usuario: ', user)
+
+    const userResult = await this.userRepository.delete(userId)
+
+    return { user: userResult }
   }
 }

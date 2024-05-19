@@ -1,7 +1,6 @@
 import { type UsersRepository } from '@/repositories/interfaces/users-repository'
 import { type User } from '@prisma/client'
 import { NotFoundError } from '../errors/not-found-error'
-import { UserAlreadyExistsError } from '../errors/user-already-exists-error'
 
 interface UpdateUserUseCaseRequest {
   userId: string
@@ -31,14 +30,6 @@ export class UpdateUserUseCase {
 
     if (!user) {
       throw new NotFoundError()
-    }
-
-    if (email) {
-      const userWithSameEmail = await this.usersRepository.findByEmail(email)
-
-      if (userWithSameEmail) {
-        throw new UserAlreadyExistsError()
-      }
     }
 
     const updateData: Partial<User> = user
