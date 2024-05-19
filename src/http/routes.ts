@@ -7,6 +7,8 @@ import { DeleteUser } from './controllers/user/delete-user'
 import { GetCultivation } from './controllers/cultivation/get-cultivation'
 import { CreateMappedArea } from './controllers/mappedArea/create-mapped-area'
 import { GetMappedArea } from './controllers/mappedArea/get-mapped-area'
+import { UpdateCultivation } from './controllers/cultivation/update-cultivation'
+import { DeleteCultivation } from './controllers/cultivation/delete-cultivation'
 
 export async function appRoutes (app: FastifyInstance) {
   // Users
@@ -18,6 +20,8 @@ export async function appRoutes (app: FastifyInstance) {
   // Cultivation
   app.post('/cultivations', CreateCultivation)
   app.get('/cultivations', GetCultivation)
+  app.put('/cultivations/:id', UpdateCultivation)
+  app.delete('/cultivations/:id', DeleteCultivation)
 
   // Mapped area
   app.post('/mapped-area', CreateMappedArea)
