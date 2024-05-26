@@ -22,8 +22,6 @@ export class DeleteUserUseCase {
       throw new NotFoundError()
     }
 
-    console.log('Usuario: ', user)
-
     const userResult = await this.userRepository.delete(userId)
 
     return { user: userResult }

@@ -6,8 +6,8 @@ import { z } from 'zod'
 
 export async function CreateMappedArea (req: FastifyRequest, res: FastifyReply) {
   const createMappedAreaBodySchema = z.object({
-    name: z.string().min(3, 'O nome deve ter mais de 3 caracteres'),
-    geospatialData: z.string(),
+    name: z.string().min(3, 'O campo nome deve ter mais de 3 caracteres'),
+    geospatialData: z.string().min(3, 'O campo dados geográficos deve ter mais de 3 caracteres'),
     totalArea: z.string(),
     centerPont: z.string().optional(),
     userId: z.string()
