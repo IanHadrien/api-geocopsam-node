@@ -44,6 +44,7 @@ model MappedArea {
   userId String
 
   plantation Plantation[]
+  MapLatLng  MapLatLng[]
 
   @@map("mappeds-area")
 }
@@ -65,4 +66,15 @@ model Plantation {
   mappedAreaId String
 
   @@map("plantations")
+}
+
+model MapLatLng {
+  id  String @id @default(uuid())
+  lat String
+  lng String
+
+  mappedArea   MappedArea @relation(fields: [mappedAreaId], references: [id])
+  mappedAreaId String
+
+  @@map("map-latlng")
 }
