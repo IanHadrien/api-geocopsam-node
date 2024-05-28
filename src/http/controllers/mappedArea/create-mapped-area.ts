@@ -1,3 +1,4 @@
+import { PrismaMapRepository } from '@/repositories/prisma/prisma-map-repositories'
 import { PrismaMappedAreaRepository } from '@/repositories/prisma/prisma-mapped-area-repositories'
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
 import { CreateMappedAreaUseCase } from '@/use-cases/mapped-area/create-mapped-area'
@@ -24,7 +25,8 @@ export async function CreateMappedArea (req: FastifyRequest, res: FastifyReply) 
   try {
     const prismaMappedAreaRepository = new PrismaMappedAreaRepository()
     const prismaUsersRepository = new PrismaUsersRepository()
-    const createMappedAreaUseCase = new CreateMappedAreaUseCase(prismaMappedAreaRepository, prismaUsersRepository)
+    const prismaMapRepository = new PrismaMapRepository()
+    const createMappedAreaUseCase = new CreateMappedAreaUseCase(prismaMappedAreaRepository, prismaMapRepository, prismaUsersRepository)
 
     await createMappedAreaUseCase.execute({
       name,

@@ -1,6 +1,7 @@
 import { UsersRepository } from '@/repositories/interfaces/users-repository'
 import { MappedArea } from '@prisma/client'
 import { MappedAreasRepository } from '@/repositories/interfaces/mapped-area-repository'
+import { MapRepository } from '@/repositories/interfaces/map-repository'
 
 interface CreateMappedAreaUseCaseRequest {
   name: string
@@ -18,6 +19,7 @@ interface CreateMappedAreaUseCaseResponse {
 export class CreateMappedAreaUseCase {
   constructor (
     private readonly mappedAreasRepository: MappedAreasRepository,
+    private readonly mapRepository: MapRepository,
     private readonly usersRepository: UsersRepository
   ) {}
 
@@ -35,6 +37,12 @@ export class CreateMappedAreaUseCase {
       throw new Error('User not found')
     }
 
+    const coordinatePairs = geospatialData.split(' ')
+    const formattedCoordinates = coordinatePairs.map((pair) => {
+      const [lng, lat] = pair.split(',').map(parseFloat)
+      return { lat, lng }
+    })
+
     const mappedArea = await this.mappedAreasRepository.create({
       name,
       geospatial_data: geospatialData,
@@ -44,6 +52,14 @@ export class CreateMappedAreaUseCase {
         connect: { id: userId }
       }
     })
+
+    const coordinatesData = formattedCoordinates.map(coordinate => ({
+      lat: String(coordinate.lat),
+      lng: String(coordinate.lng),
+      mappedAreaId: mappedArea.id
+    }))
+
+    await this.mapRepository.createMany(coordinatesData)
 
     return {
       mappedArea
