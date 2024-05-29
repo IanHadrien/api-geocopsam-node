@@ -11,6 +11,7 @@ import { UpdateCultivation } from './controllers/cultivation/update-cultivation'
 import { DeleteCultivation } from './controllers/cultivation/delete-cultivation'
 import { UpdateMappedArea } from './controllers/mappedArea/update-mapped-area'
 import { DeleteMappedArea } from './controllers/mappedArea/delete-mapped-area'
+import { GetMap } from './controllers/map/get-map'
 
 export async function appRoutes (app: FastifyInstance) {
   // Users
@@ -30,4 +31,7 @@ export async function appRoutes (app: FastifyInstance) {
   app.get('/mapped-area', GetMappedArea)
   app.put('/mapped-area/:id', UpdateMappedArea)
   app.delete('/mapped-area/:id', DeleteMappedArea)
+
+  // Map
+  app.get('/map/:id', GetMap)
 }
