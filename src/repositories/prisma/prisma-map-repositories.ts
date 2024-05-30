@@ -3,7 +3,28 @@ import { prisma } from '@/lib/prisma'
 import { MapRepository } from '../interfaces/map-repository'
 
 export class PrismaMapRepository implements MapRepository {
-  async getAll (id: string) {
+  async getAll () {
+    const maps = await prisma.mapLatLng.findMany({
+      orderBy: {
+        position: 'asc'
+      }
+    })
+
+    const groupedMaps = maps.reduce<Record<string, Array<{ lat: number, lng: number }>>>((acc, map) => {
+      const { mappedAreaId, lat, lng } = map
+      if (!acc[mappedAreaId]) {
+        acc[mappedAreaId] = []
+      }
+      acc[mappedAreaId].push({ lat: parseFloat(lat), lng: parseFloat(lng) })
+      return acc
+    }, {})
+
+    // console.log(Object.values(groupedMaps))
+
+    return Object.values(groupedMaps)
+  }
+
+  async findById (id: string) {
     const maps = await prisma.mapLatLng.findMany({
       where: {
         mappedAreaId: id

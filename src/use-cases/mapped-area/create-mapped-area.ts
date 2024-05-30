@@ -53,10 +53,11 @@ export class CreateMappedAreaUseCase {
       }
     })
 
-    const coordinatesData = formattedCoordinates.map(coordinate => ({
+    const coordinatesData = formattedCoordinates.map((coordinate, index) => ({
       lat: String(coordinate.lat),
       lng: String(coordinate.lng),
-      mappedAreaId: mappedArea.id
+      mappedAreaId: mappedArea.id,
+      position: index
     }))
 
     await this.mapRepository.createMany(coordinatesData)

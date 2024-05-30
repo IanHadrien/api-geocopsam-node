@@ -69,9 +69,10 @@ model Plantation {
 }
 
 model MapLatLng {
-  id  String @id @default(uuid())
-  lat String
-  lng String
+  id       String @id @default(uuid())
+  lat      String
+  lng      String
+  position Int
 
   mappedArea   MappedArea @relation(fields: [mappedAreaId], references: [id])
   mappedAreaId String

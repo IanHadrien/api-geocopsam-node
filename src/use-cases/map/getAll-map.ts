@@ -1,14 +1,14 @@
 import { MapRepository } from '@/repositories/interfaces/map-repository'
 
-interface GetMapUseCaseResponse {
-  maps: Array<{ lat: string, lng: string }>
+interface GetAllMapUseCaseResponse {
+  maps: Array<Array<{ lat: number, lng: number }>>
 }
 
-export class GetMapUseCase {
+export class GetAllMapUseCase {
   constructor (private readonly mapRepository: MapRepository) {}
 
-  async execute (id: string): Promise<GetMapUseCaseResponse> {
-    const maps = await this.mapRepository.findById(id)
+  async execute (): Promise<GetAllMapUseCaseResponse> {
+    const maps = await this.mapRepository.getAll()
 
     if (!maps) {
       // throw new ResourceNotFoundError()

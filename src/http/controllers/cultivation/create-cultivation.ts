@@ -12,8 +12,6 @@ export async function CreateCultivation (req: FastifyRequest, res: FastifyReply)
     })
   })
 
-  console.log(createCultivationBodySchema)
-
   const {
     name,
     description,
