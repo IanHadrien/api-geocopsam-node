@@ -13,6 +13,10 @@ import { UpdateMappedArea } from './controllers/mappedArea/update-mapped-area'
 import { DeleteMappedArea } from './controllers/mappedArea/delete-mapped-area'
 import { GetMap } from './controllers/map/get-map'
 import { GetAllMap } from './controllers/map/getAll-map'
+import { CreatePlantation } from './controllers/plantation/create-plantation'
+import { UpdatePlantation } from './controllers/plantation/update-plantation'
+import { GetPlantation } from './controllers/plantation/get-plantation'
+import { DeletePlantation } from './controllers/plantation/delete-plantation'
 
 export async function appRoutes (app: FastifyInstance) {
   // Users
@@ -36,4 +40,10 @@ export async function appRoutes (app: FastifyInstance) {
   // Map
   app.get('/map', GetAllMap)
   app.get('/map/:id', GetMap)
+
+  // Plantation
+  app.post('/plantations', CreatePlantation)
+  app.get('/plantations', GetPlantation)
+  app.put('/plantations/:id', UpdatePlantation)
+  app.delete('/plantations/:id', DeletePlantation)
 }
