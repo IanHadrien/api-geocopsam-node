@@ -3,21 +3,39 @@ import { Plantation } from '@prisma/client'
 
 interface GetPlantationUseCaseResponse {
   plantations: Plantation[]
+  from: number
+  to: number
+  page: number
+  pageSize: number
+  totalCount: number
+  hasNextPage: boolean
+  hasPreviousPage: boolean
 }
 
 export class GetPlantationUseCase {
   constructor (private readonly plantationsRepository: PlantationsRepository) {}
 
-  async execute (): Promise<GetPlantationUseCaseResponse> {
-    const plantations = await this.plantationsRepository.getAll()
+  async execute (page: number, pageSize: number): Promise<GetPlantationUseCaseResponse> {
+    const { data, totalCount } = await this.plantationsRepository.getAll(page, pageSize)
 
-    if (!plantations) {
-      // throw new ResourceNotFoundError()
+    if (!data) {
       console.error('Plantations not found')
     }
 
+    const from = (page - 1) * pageSize + 1
+    const to = from + data.length - 1
+    const hasNextPage = to < totalCount
+    const hasPreviousPage = from > 1
+
     return {
-      plantations
+      plantations: data,
+      from,
+      to,
+      page,
+      pageSize,
+      totalCount,
+      hasNextPage,
+      hasPreviousPage
     }
   }
 }

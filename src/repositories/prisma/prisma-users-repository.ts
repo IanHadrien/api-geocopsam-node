@@ -1,6 +1,7 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
 import { UsersRepository } from '../interfaces/users-repository'
 import { prisma } from '@/lib/prisma'
+import { PaginationType } from '@/@types/paginate'
 
 export class PrismaUsersRepository implements UsersRepository {
   async findById (id: string) {
@@ -13,10 +14,19 @@ export class PrismaUsersRepository implements UsersRepository {
     return user
   }
 
-  async getAll () {
-    const user = await prisma.user.findMany()
+  async getAll (page: number, pageSize: number): Promise<PaginationType<User>> {
+    const skip = (page - 1) * pageSize
+    const take = pageSize
 
-    return user
+    const [data, totalCount] = await Promise.all([
+      await prisma.user.findMany({
+        skip,
+        take
+      }),
+      prisma.user.count()
+    ])
+
+    return { data, totalCount }
   }
 
   async findByEmail (email: string) {

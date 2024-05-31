@@ -1,6 +1,7 @@
-import { Prisma } from '@prisma/client'
+import { Cultivation, Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { CultivationsRepository } from '../interfaces/cultivations-repository'
+import { PaginationType } from '@/@types/paginate'
 
 export class PrismaCultivationsRepository implements CultivationsRepository {
   async findById (id: string) {
@@ -13,10 +14,19 @@ export class PrismaCultivationsRepository implements CultivationsRepository {
     return cultivation
   }
 
-  async getAll () {
-    const cultivation = await prisma.cultivation.findMany()
+  async getAll (page: number, pageSize: number): Promise<PaginationType<Cultivation>> {
+    const skip = (page - 1) * pageSize
+    const take = pageSize
 
-    return cultivation
+    const [data, totalCount] = await Promise.all([
+      prisma.cultivation.findMany({
+        skip,
+        take
+      }),
+      prisma.cultivation.count()
+    ])
+
+    return { data, totalCount }
   }
 
   async create (data: Prisma.CultivationCreateInput) {

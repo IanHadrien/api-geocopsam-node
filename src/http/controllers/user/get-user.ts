@@ -1,13 +1,17 @@
+import { PaginationQuery } from '@/@types/fastifyRequest'
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
 import { GetUserUseCase } from '@/use-cases/users/get-user'
 import { FastifyReply } from 'fastify'
 
-export async function GetUser (res: FastifyReply) {
+export async function GetUser (req: PaginationQuery, res: FastifyReply) {
   const prismaUsersRepository = new PrismaUsersRepository()
+
+  const page = parseInt(req.query.page) || 1
+  const pageSize = parseInt(req.query.pageSize) || 10
 
   try {
     const userUseCase = new GetUserUseCase(prismaUsersRepository)
-    const users = userUseCase.execute()
+    const users = userUseCase.execute(page, pageSize)
 
     return users
   } catch (err) {

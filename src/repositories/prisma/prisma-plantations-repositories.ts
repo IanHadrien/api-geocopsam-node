@@ -1,18 +1,27 @@
-import { Prisma } from '@prisma/client'
+import { Plantation, Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { PlantationsRepository } from '../interfaces/plantation-repository'
+import { PaginationType } from '@/@types/paginate'
 
 export class PrismaPlantationsRepository implements PlantationsRepository {
-  async getAll () {
-    const plantations = await prisma.plantation.findMany({
-      include: {
-        cultivation: true,
-        mappedArea: true,
-        user: true
-      }
-    })
+  async getAll (page: number, pageSize: number): Promise<PaginationType<Plantation>> {
+    const skip = (page - 1) * pageSize
+    const take = pageSize
 
-    return plantations
+    const [data, totalCount] = await Promise.all([
+      prisma.plantation.findMany({
+        skip,
+        take,
+        include: {
+          user: true,
+          cultivation: true,
+          mappedArea: true
+        }
+      }),
+      prisma.plantation.count()
+    ])
+
+    return { data, totalCount }
   }
 
   async findById (id: string) {

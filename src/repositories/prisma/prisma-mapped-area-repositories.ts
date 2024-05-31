@@ -1,12 +1,22 @@
-import { Prisma } from '@prisma/client'
+import { MappedArea, Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { MappedAreasRepository } from '../interfaces/mapped-area-repository'
+import { PaginationType } from '@/@types/paginate'
 
 export class PrismaMappedAreaRepository implements MappedAreasRepository {
-  async getAll () {
-    const mappedArea = await prisma.mappedArea.findMany()
+  async getAll (page: number, pageSize: number): Promise<PaginationType<MappedArea>> {
+    const skip = (page - 1) * pageSize
+    const take = pageSize
 
-    return mappedArea
+    const [data, totalCount] = await Promise.all([
+      prisma.mappedArea.findMany({
+        skip,
+        take
+      }),
+      prisma.mappedArea.count()
+    ])
+
+    return { data, totalCount }
   }
 
   async findById (id: string) {
