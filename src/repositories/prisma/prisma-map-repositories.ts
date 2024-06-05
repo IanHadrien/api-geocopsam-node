@@ -29,13 +29,21 @@ export class PrismaMapRepository implements MapRepository {
       where: {
         mappedAreaId: id
       },
-      select: {
-        lat: true,
-        lng: true
+      orderBy: {
+        position: 'asc'
       }
     })
 
-    return maps
+    const groupedMaps = maps.reduce<Record<string, Array<{ lat: number, lng: number }>>>((acc, map) => {
+      const { mappedAreaId, lat, lng } = map
+      if (!acc[mappedAreaId]) {
+        acc[mappedAreaId] = []
+      }
+      acc[mappedAreaId].push({ lat: parseFloat(lat), lng: parseFloat(lng) })
+      return acc
+    }, {})
+
+    return Object.values(groupedMaps)
   }
 
   async createMany (data: Prisma.MapLatLngCreateManyInput[]) {

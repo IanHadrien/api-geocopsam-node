@@ -11,7 +11,10 @@ export class PrismaMappedAreaRepository implements MappedAreasRepository {
     const [data, totalCount] = await Promise.all([
       prisma.mappedArea.findMany({
         skip,
-        take
+        take,
+        include: {
+          user: true
+        }
       }),
       prisma.mappedArea.count()
     ])

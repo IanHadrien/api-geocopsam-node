@@ -1,7 +1,7 @@
 import { MapRepository } from '@/repositories/interfaces/map-repository'
 
 interface GetMapUseCaseResponse {
-  maps: Array<{ lat: string, lng: string }>
+  maps: Array<Array<{ lat: number, lng: number }>>
 }
 
 export class GetMapUseCase {
