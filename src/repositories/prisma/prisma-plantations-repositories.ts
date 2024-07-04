@@ -4,6 +4,18 @@ import { PlantationsRepository } from '../interfaces/plantation-repository'
 import { PaginationType } from '@/@types/paginate'
 
 export class PrismaPlantationsRepository implements PlantationsRepository {
+  private async findMapDataByMappedAreaId (mappedAreaId: string): Promise<Array<{ lat: number, lng: number }>> {
+    const maps = await prisma.mapLatLng.findMany({
+      where: { mappedAreaId },
+      orderBy: { position: 'asc' }
+    })
+
+    return maps.map(map => ({
+      lat: parseFloat(map.lat),
+      lng: parseFloat(map.lng)
+    }))
+  }
+
   async getAll (page: number, pageSize: number): Promise<PaginationType<Plantation>> {
     const skip = (page - 1) * pageSize
     const take = pageSize
@@ -21,7 +33,14 @@ export class PrismaPlantationsRepository implements PlantationsRepository {
       prisma.plantation.count()
     ])
 
-    return { data, totalCount }
+    const dataWithMapData = await Promise.all(
+      data.map(async (plantation) => {
+        const mapData = await this.findMapDataByMappedAreaId(plantation.mappedAreaId)
+        return { ...plantation, mapData }
+      })
+    )
+
+    return { data: dataWithMapData, totalCount }
   }
 
   async findById (id: string) {
