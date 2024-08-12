@@ -6,7 +6,7 @@ interface UpdateCultivationUseCaseRequest {
   cultivationId: string
   name?: string
   description?: string
-  probableHarvestDate?: Date
+  probableHarvestDate?: string
 }
 
 interface UpdateCultivationUseCaseResponse {
@@ -28,8 +28,6 @@ export class UpdateCultivationUseCase {
     if (!cultivation) {
       throw new NotFoundError()
     }
-
-    console.log('Teste: ', cultivation)
 
     const updateData: Partial<Cultivation> = cultivation
 

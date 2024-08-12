@@ -4,7 +4,7 @@ import { Cultivation } from '@prisma/client'
 interface CreateCultivationUseCaseRequest {
   name: string
   description?: string
-  probableHarvestDate: Date
+  probableHarvestDate: string
 }
 
 interface CreateCultivationUseCaseResponse {

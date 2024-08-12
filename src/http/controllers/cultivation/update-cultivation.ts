@@ -9,10 +9,11 @@ export async function UpdateCultivation (req: FastifyRequest, res: FastifyReply)
     cultivationId: z.string(),
     name: z.string().min(3, 'O nome deve ter mais de 3 caracteres').optional(),
     description: z.string().optional(),
-    probableHarvestDate: z.coerce.date({
-      required_error: 'A data é obrigatoria',
-      invalid_type_error: 'Data inválida'
-    }).optional()
+    probableHarvestDate: z
+      .string()
+      .min(3, 'O campo tempo até a colheita deve ter mais de 3 caracteres')
+      .regex(/(anos|meses|ano|mes)/, "O campo deve conter 'anos/ano' ou 'meses/mes'")
+      .optional()
   })
 
   const {

@@ -23,10 +23,10 @@ model User {
 }
 
 model Cultivation {
-  id                    String   @id @default(uuid())
+  id                    String  @id @default(uuid())
   name                  String
   description           String?
-  probable_harvest_date DateTime
+  probable_harvest_date String
 
   plantation Plantation[]
 

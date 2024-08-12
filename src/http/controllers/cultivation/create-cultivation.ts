@@ -6,10 +6,10 @@ export async function CreateCultivation (req: FastifyRequest, res: FastifyReply)
   const createCultivationBodySchema = z.object({
     name: z.string().min(3, 'O nome deve ter mais de 3 caracteres'),
     description: z.string().optional(),
-    probableHarvestDate: z.coerce.date({
-      required_error: 'A data é obrigatoria',
-      invalid_type_error: 'Data inválida'
-    })
+    probableHarvestDate: z
+      .string()
+      .min(3, 'O campo tempo até a colheita deve ter mais de 3 caracteres')
+      .regex(/(anos|meses|ano|mes)/, "O campo deve conter 'anos/ano' ou 'meses/mes'")
   })
 
   const {
@@ -19,14 +19,14 @@ export async function CreateCultivation (req: FastifyRequest, res: FastifyReply)
   } = createCultivationBodySchema.parse(req.body)
 
   try {
-    const probableHarvestDateObj = new Date(probableHarvestDate)
+    // const probableHarvestDateObj = new Date(probableHarvestDate)
 
     const createCultivationUseCase = makeCreateCultivationUseCase()
 
     await createCultivationUseCase.execute({
       name,
       description,
-      probableHarvestDate: probableHarvestDateObj
+      probableHarvestDate
     })
   } catch (err) {
     // if (err instanceof UserAlreadyExistsError) {
