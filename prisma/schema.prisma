@@ -36,11 +36,11 @@ model Cultivation {
 model MappedArea {
   id              String  @id @default(uuid())
   name            String
-  geospatial_data String
+  geospatial_data String?
   total_area      String
   center_pont     String?
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   plantation Plantation[]
@@ -56,13 +56,13 @@ model Plantation {
   previous_culture String?
   created_at       DateTime? @default(now())
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  cultivation   Cultivation @relation(fields: [cultivationId], references: [id])
+  cultivation   Cultivation @relation(fields: [cultivationId], references: [id], onDelete: Cascade)
   cultivationId String
 
-  mappedArea   MappedArea @relation(fields: [mappedAreaId], references: [id])
+  mappedArea   MappedArea @relation(fields: [mappedAreaId], references: [id], onDelete: Cascade)
   mappedAreaId String
 
   @@map("plantations")
@@ -74,7 +74,7 @@ model MapLatLng {
   lng      String
   position Int
 
-  mappedArea   MappedArea @relation(fields: [mappedAreaId], references: [id])
+  mappedArea   MappedArea @relation(fields: [mappedAreaId], references: [id], onDelete: Cascade)
   mappedAreaId String
 
   @@map("map-latlng")

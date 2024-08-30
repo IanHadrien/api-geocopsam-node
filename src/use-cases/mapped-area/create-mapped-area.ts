@@ -45,7 +45,6 @@ export class CreateMappedAreaUseCase {
 
     const mappedArea = await this.mappedAreasRepository.create({
       name,
-      geospatial_data: geospatialData,
       total_area: totalArea,
       center_pont: centerPont,
       user: {
