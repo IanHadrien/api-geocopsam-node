@@ -26,6 +26,7 @@ model Cultivation {
   id                    String  @id @default(uuid())
   name                  String
   description           String?
+  color                 String?
   probable_harvest_date String
 
   plantation Plantation[]

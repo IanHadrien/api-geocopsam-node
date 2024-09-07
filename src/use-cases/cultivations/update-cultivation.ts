@@ -6,6 +6,7 @@ interface UpdateCultivationUseCaseRequest {
   cultivationId: string
   name?: string
   description?: string
+  color?: string
   probableHarvestDate?: string
 }
 
@@ -21,7 +22,8 @@ export class UpdateCultivationUseCase {
       cultivationId,
       name,
       description,
-      probableHarvestDate
+      probableHarvestDate,
+      color
     }: UpdateCultivationUseCaseRequest): Promise<UpdateCultivationUseCaseResponse> {
     const cultivation = await this.cultivationRepository.findById(cultivationId)
 
@@ -34,6 +36,7 @@ export class UpdateCultivationUseCase {
     if (name) updateData.name = name
     if (description) updateData.description = description
     if (probableHarvestDate) updateData.probable_harvest_date = probableHarvestDate
+    if (color) updateData.color = color
 
     const updateCultivation = await this.cultivationRepository.update(cultivationId, updateData)
 

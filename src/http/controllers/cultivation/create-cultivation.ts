@@ -6,6 +6,7 @@ export async function CreateCultivation (req: FastifyRequest, res: FastifyReply)
   const createCultivationBodySchema = z.object({
     name: z.string().min(3, 'O nome deve ter mais de 3 caracteres'),
     description: z.string().optional(),
+    color: z.string().optional(),
     probableHarvestDate: z
       .string()
       .min(3, 'O campo tempo até a colheita deve ter mais de 3 caracteres')
@@ -15,7 +16,8 @@ export async function CreateCultivation (req: FastifyRequest, res: FastifyReply)
   const {
     name,
     description,
-    probableHarvestDate
+    probableHarvestDate,
+    color
   } = createCultivationBodySchema.parse(req.body)
 
   try {
@@ -26,7 +28,8 @@ export async function CreateCultivation (req: FastifyRequest, res: FastifyReply)
     await createCultivationUseCase.execute({
       name,
       description,
-      probableHarvestDate
+      probableHarvestDate,
+      color
     })
   } catch (err) {
     // if (err instanceof UserAlreadyExistsError) {

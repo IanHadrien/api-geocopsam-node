@@ -4,6 +4,7 @@ import { Cultivation } from '@prisma/client'
 interface CreateCultivationUseCaseRequest {
   name: string
   description?: string
+  color?: string
   probableHarvestDate: string
 }
 
@@ -18,14 +19,16 @@ export class CreateCultivationUseCase {
     {
       name,
       description,
-      probableHarvestDate
+      probableHarvestDate,
+      color
     }: CreateCultivationUseCaseRequest): Promise<CreateCultivationUseCaseResponse> {
     // Verificar se existe mais alguma platação com o mesmo nome
 
     const cultivation = await this.cultivationRepository.create({
       name,
       description,
-      probable_harvest_date: probableHarvestDate
+      probable_harvest_date: probableHarvestDate,
+      color
     })
 
     return {

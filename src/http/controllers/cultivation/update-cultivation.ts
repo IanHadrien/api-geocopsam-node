@@ -9,6 +9,7 @@ export async function UpdateCultivation (req: FastifyRequest, res: FastifyReply)
     cultivationId: z.string(),
     name: z.string().min(3, 'O nome deve ter mais de 3 caracteres').optional(),
     description: z.string().optional(),
+    color: z.string().optional(),
     probableHarvestDate: z
       .string()
       .min(3, 'O campo tempo até a colheita deve ter mais de 3 caracteres')
@@ -20,7 +21,8 @@ export async function UpdateCultivation (req: FastifyRequest, res: FastifyReply)
     name,
     description,
     probableHarvestDate,
-    cultivationId
+    cultivationId,
+    color
   } = createCultivationBodySchema.parse(req.body)
 
   try {
@@ -32,7 +34,8 @@ export async function UpdateCultivation (req: FastifyRequest, res: FastifyReply)
       cultivationId,
       name,
       description,
-      probableHarvestDate
+      probableHarvestDate,
+      color
     })
   } catch (err) {
     console.error(err)
