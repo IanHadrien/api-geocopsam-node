@@ -6,12 +6,14 @@ import { FastifyReply } from 'fastify'
 export async function GetPlantation (req: PaginationQuery, res: FastifyReply) {
   const prismaPlantationsRepository = new PrismaPlantationsRepository()
 
-  const page = parseInt(req.query.page) || 1
-  const pageSize = parseInt(req.query.pageSize) || 10
+  const page = req.query.page ? parseInt(req.query.page) : undefined
+  const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : undefined
+  const userId = req.query.userId ? String(req.query.userId) : null
+  const cultivationId = req.query.cultivationId ? String(req.query.cultivationId) : null
 
   try {
     const getUseCase = new GetPlantationUseCase(prismaPlantationsRepository)
-    const plantations = getUseCase.execute(page, pageSize)
+    const plantations = getUseCase.execute(page, pageSize, userId, cultivationId)
 
     return plantations
   } catch (err) {

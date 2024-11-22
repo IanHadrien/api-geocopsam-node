@@ -47,21 +47,43 @@ export class PrismaPlantationsRepository implements PlantationsRepository {
     return { mapFormatted, centerPoint }
   }
 
-  async getAll (page: number, pageSize: number): Promise<PaginationType<Plantation>> {
-    const skip = (page - 1) * pageSize
-    const take = pageSize
+  async getAll (page?: number, pageSize?: number, userId?: string | null, cultivationId?: string | null): Promise<PaginationType<Plantation>> {
+    let skip: number | undefined
+    let take: number | undefined
+
+    if (page && pageSize) {
+      skip = (page - 1) * pageSize
+      take = pageSize
+    }
+
+    const whereClause: any = {}
+
+    // Aplica os filtros se os parâmetros não forem nulos
+    if (userId) {
+      whereClause.userId = userId
+    }
+
+    if (cultivationId) {
+      whereClause.cultivationId = cultivationId
+    }
 
     const [data, totalCount] = await Promise.all([
       prisma.plantation.findMany({
+        where: whereClause,
         skip,
         take,
         include: {
           user: true,
           cultivation: true,
           mappedArea: true
+        },
+        orderBy: {
+          created_at: 'asc'
         }
       }),
-      prisma.plantation.count()
+      prisma.plantation.count({
+        where: whereClause
+      })
     ])
 
     const dataWithMapData = await Promise.all(

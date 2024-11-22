@@ -5,8 +5,6 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 export async function DeleteCultivation (req: FastifyRequest, res: FastifyReply) {
   const cultivationId = req.params.id as string
 
-  console.log('delete', cultivationId)
-
   const prismaCultivationsRepository = new PrismaCultivationsRepository()
 
   try {

@@ -6,7 +6,7 @@ interface PaginatedResult<T> {
 }
 
 export interface PlantationsRepository {
-  getAll: (page: number, pageSize: number) => Promise<PaginatedResult<Plantation>>
+  getAll: (page?: number, pageSize?: number, userId?: string | null, cultivationId?: string | null) => Promise<PaginatedResult<Plantation>>
   findById: (id: string) => Promise<Plantation | null>
   create: (data: Prisma.PlantationCreateInput) => Promise<Plantation>
   update: (id: string, data: Prisma.PlantationUpdateInput) => Promise<Plantation>

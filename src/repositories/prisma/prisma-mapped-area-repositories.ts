@@ -4,9 +4,14 @@ import { MappedAreasRepository } from '../interfaces/mapped-area-repository'
 import { PaginationType } from '@/@types/paginate'
 
 export class PrismaMappedAreaRepository implements MappedAreasRepository {
-  async getAll (page: number, pageSize: number): Promise<PaginationType<MappedArea>> {
-    const skip = (page - 1) * pageSize
-    const take = pageSize
+  async getAll (page?: number, pageSize?: number): Promise<PaginationType<MappedArea>> {
+    let skip: number | undefined
+    let take: number | undefined
+
+    if (page && pageSize) {
+      skip = (page - 1) * pageSize
+      take = pageSize
+    }
 
     const [data, totalCount] = await Promise.all([
       prisma.mappedArea.findMany({
@@ -14,7 +19,15 @@ export class PrismaMappedAreaRepository implements MappedAreasRepository {
         take,
         include: {
           user: true
+        },
+        orderBy: {
+          name: 'asc'
         }
+        // where: {
+        //   plantation: {
+        //     none: {} // Filtra mappedArea que não possui plantações associadas
+        //   }
+        // }
       }),
       prisma.mappedArea.count()
     ])

@@ -5,8 +5,6 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 export async function DeleteUser (req: FastifyRequest, res: FastifyReply) {
   const userId = req.params.id as string
 
-  console.log('delete', userId)
-
   const prismaUsersRepository = new PrismaUsersRepository()
 
   try {

@@ -6,8 +6,8 @@ import { FastifyReply } from 'fastify'
 export async function GetMappedArea (req: PaginationQuery, res: FastifyReply) {
   const prismaMappedAreaRepository = new PrismaMappedAreaRepository()
 
-  const page = parseInt(req.query.page) || 1
-  const pageSize = parseInt(req.query.pageSize) || 10
+  const page = req.query.page ? parseInt(req.query.page) : undefined
+  const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : undefined
 
   try {
     const mappedAreaUseCase = new GetMappedAreaUseCase(prismaMappedAreaRepository)
