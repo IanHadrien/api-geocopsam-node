@@ -16,5 +16,67 @@ model User {
   phone         String?
   created_at    DateTime? @default(now())
 
+  mappedArea MappedArea[]
+  plantation Plantation[]
+
   @@map("users")
+}
+
+model Cultivation {
+  id                    String  @id @default(uuid())
+  name                  String
+  description           String?
+  color                 String?
+  probable_harvest_date String
+
+  plantation Plantation[]
+
+  @@map("cultivations")
+}
+
+model MappedArea {
+  id              String  @id @default(uuid())
+  name            String
+  geospatial_data String?
+  total_area      String
+  center_pont     String?
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  plantation Plantation[]
+  MapLatLng  MapLatLng[]
+
+  @@map("mappeds-area")
+}
+
+model Plantation {
+  id               String    @id @default(uuid())
+  name             String
+  planting_date    DateTime
+  previous_culture String?
+  created_at       DateTime? @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  cultivation   Cultivation @relation(fields: [cultivationId], references: [id], onDelete: Cascade)
+  cultivationId String
+
+  mappedArea   MappedArea @relation(fields: [mappedAreaId], references: [id], onDelete: Cascade)
+  mappedAreaId String
+
+  @@map("plantations")
+}
+
+model MapLatLng {
+  id       String @id @default(uuid())
+  lat      String
+  lng      String
+  position Int
+
+  mappedArea   MappedArea @relation(fields: [mappedAreaId], references: [id], onDelete: Cascade)
+  mappedAreaId String
+
+  @@map("map-latlng")
 }
